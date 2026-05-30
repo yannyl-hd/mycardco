@@ -18,8 +18,16 @@ searchBtn.addEventListener('click', function() {
           .then(function(setData) {
             results.innerHTML = '';
 
-            setData.cards.forEach(function(card) {
-              if (!card.image) return;
+            const visibleCards = setData.cards.filter(function(card) {
+              return card.image;
+            });
+
+            if (visibleCards.length === 0) {
+              results.innerHTML = '<p>No card images available for this set.</p>';
+              return;
+            }
+
+            visibleCards.forEach(function(card) {
               const cardc = document.createElement('div');
               cardc.classList.add('card');
               const img = document.createElement('img');
@@ -74,15 +82,14 @@ searchBtn.addEventListener('click', function() {
     });
 });
 
-// autosearch
 searchInput.addEventListener('input', function() {
   const query = searchInput.value;
-  console.log(query)
 
   if (query.length === 0) {
     autoSearchResults.innerHTML = '';
     return;
   }
+
   Promise.all([
     fetch(`https://api.tcgdex.net/v2/en/sets?name=${query}&pagination:itemsPerPage=5`).then(r => r.json()),
     fetch(`https://api.tcgdex.net/v2/en/cards?name=${query}&pagination:itemsPerPage=5`).then(r => r.json())
@@ -90,34 +97,41 @@ searchInput.addEventListener('input', function() {
   .then(function(results) {
     const sets = results[0];
     const cards = results[1];
-  
 
-  autoSearchResults.innerHTML = '';
+    autoSearchResults.innerHTML = '';
 
-  // sets
     sets.forEach(function(set) {
       const setName = document.createElement('p');
       setName.classList.add('set');
       setName.textContent = set.name + ' (set)';
+      setName.addEventListener('click', function() {
+        searchInput.value = set.name;
+        autoSearchResults.innerHTML = '';
+        searchBtn.click();
+      });
       autoSearchResults.appendChild(setName);
-    })
+    });
 
-  // cards
-  const uniqueNames = new Set();
-         
+    const uniqueNames = new Set();
+    cards.forEach(function(card) {
+      uniqueNames.add(card.name);
+    });
 
-   cards.forEach(function(card) {
-    uniqueNames.add(card.name);
-   })         
-   uniqueNames.forEach(function(uniquecard) {
+    uniqueNames.forEach(function(uniquecard) {
       const uniqueCard = document.createElement('p');
-      uniqueCard.classList.add('card')
+      uniqueCard.classList.add('suggestion'); 
       uniqueCard.textContent = uniquecard;
-     autoSearchResults.appendChild(uniqueCard);
-      })          
-  })          
-}); 
-
+      uniqueCard.addEventListener('click', function() {
+        searchInput.value = uniquecard;
+        autoSearchResults.innerHTML = '';
+        searchBtn.click();
+      });
+      autoSearchResults.appendChild(uniqueCard);
+    });
+  });
+});
 searchInput.addEventListener('blur', function() {
-  autoSearchResults.innerHTML = '';
-})
+  setTimeout(function() {
+    autoSearchResults.innerHTML = '';
+  }, 200);
+});
