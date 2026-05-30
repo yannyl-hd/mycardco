@@ -23,7 +23,37 @@ searchBtn.addEventListener('click', function() {
             });
 
             if (visibleCards.length === 0) {
-              results.innerHTML = '<p>No card images available for this set.</p>';
+              fetch(`https://api.tcgdex.net/v2/en/cards?name=${query}&category=not:Pocket`)
+                .then(function(response) {
+                  return response.json();
+                })
+                .then(function(data) {
+                  if (data.length === 0) {
+                    results.innerHTML = '<p>No results found</p>';
+                    return;
+                  }
+                  results.innerHTML = '';
+
+                  data.forEach(function(card) {
+                    if (!card.image) return;
+                    const cardc = document.createElement('div');
+                    cardc.classList.add('card');
+                    const img = document.createElement('img');
+                    img.src = card.image + '/low.webp';
+                    img.alt = card.name;
+                    const name = document.createElement('p');
+                    name.classList.add('card-name');
+                    const [setId, cardNumber] = card.id.split('-');
+                    const setinfo = document.createElement('p');
+                    name.textContent = card.name + ' ' + cardNumber;
+                    setinfo.classList.add('card-info');
+                    setinfo.textContent = setId;
+                    cardc.appendChild(img);
+                    cardc.appendChild(name);
+                    cardc.appendChild(setinfo);
+                    results.appendChild(cardc);
+                  });
+                });
               return;
             }
 
@@ -91,16 +121,18 @@ searchInput.addEventListener('input', function() {
   }
 
   Promise.all([
-    fetch(`https://api.tcgdex.net/v2/en/sets?name=${query}&pagination:itemsPerPage=5`).then(r => r.json()),
-    fetch(`https://api.tcgdex.net/v2/en/cards?name=${query}&pagination:itemsPerPage=5`).then(r => r.json())
+    fetch(`https://api.tcgdex.net/v2/en/sets?name=${query}&pagination:itemsPerPage=50`).then(r => r.json()),
+    fetch(`https://api.tcgdex.net/v2/en/cards?name=${query}&pagination:itemsPerPage=50`).then(r => r.json())
   ])
   .then(function(results) {
     const sets = results[0];
     const cards = results[1];
 
     autoSearchResults.innerHTML = '';
-
+    let setcount =0;
     sets.forEach(function(set) {
+      if (setcount>=3) return;
+      setcount++;
       const setName = document.createElement('p');
       setName.classList.add('set');
       setName.textContent = set.name + ' (set)';
@@ -116,8 +148,10 @@ searchInput.addEventListener('input', function() {
     cards.forEach(function(card) {
       uniqueNames.add(card.name);
     });
-
+    let count = 0;
     uniqueNames.forEach(function(uniquecard) {
+      if (count >=8) return;
+      count++;
       const uniqueCard = document.createElement('p');
       uniqueCard.classList.add('suggestion'); 
       uniqueCard.textContent = uniquecard;
