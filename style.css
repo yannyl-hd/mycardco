@@ -43,6 +43,24 @@
   width: 100%;
 }
 
+.card {
+  position: relative;
+}
+
+.add-btn,
+.remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  opacity: 0;
+  background: white;
+}
+
+.card:hover .add-btn,
+.card:hover .remove-btn {
+  opacity: 1;
+}
+
 .card-name {
   font-weight: bold;
   margin: 4px 0 2px;
@@ -117,11 +135,7 @@
 }
 
 .remove-btn {
-  margin-top: 6px;
   font-size: 0.75rem;
-  color: red;
-  background: none;
-  border: none;
   cursor: pointer;
 }
 

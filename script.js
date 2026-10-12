@@ -245,6 +245,7 @@ function renderwishlist() {
     setinfo.textContent = setId;
 
     const removeBtn = document.createElement('button');
+    removeBtn.classList.add('remove-btn');
     removeBtn.textContent = 'Remove';
     removeBtn.addEventListener('click', function() {
       removeFromWishlist(index);
