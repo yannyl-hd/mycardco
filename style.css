@@ -1,146 +1,660 @@
-/* search results dropdown */
-#search-results {
-  position: relative;
-  background: white;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 390px;
-  z-index: 10;
-  padding: 5px;
+
+/* =========================================
+   MYCARDCO — Design
+========================================= */
+
+/* 1. Theme */
+
+:root {
+  --cream: #f7f0e7;
+  --rose: #aa7272;
+  --rose-dark: #8f5959;
+  --brown: #533d38;
+  --card-bg: #fffaf5;
+  --rose-pale: #f4e5e1;
+  --border: #e8d9ce;
+  --muted: #947d74;
+  --shadow: 0 8px 24px rgba(83, 61, 56, 0.08);
 }
 
-#search-results p {
-  padding: 8px 12px;
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+body {
+  min-height: 100vh;
   margin: 0;
-  cursor: pointer;
+  background: var(--cream);
+  color: var(--brown);
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  line-height: 1.5;
 }
 
-#search-results p:hover {
-  background: #f0f0f0;
+button,
+input {
+  font: inherit;
 }
 
-.suggestion {
-  padding: 8px 12px;
-  cursor: pointer;
+button {
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* card grid */
-#results {
+/* 2. Header and logo */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 1rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: 16px 5%;
+  background: rgba(247, 240, 231, 0.96);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
 }
 
-.card {
+.brand {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  text-decoration: none;
+}
+
+.brand-logo {
+  display: block;
+  width: 175px;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Navigation, if present */
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.nav-link {
+  color: var(--brown);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--rose);
+}
+
+/* 3. Main page layout */
+
+.collection-page {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 44px 5% 72px;
+}
+
+#wishlist-section {
+  width: 100%;
+  max-width: 1500px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 36px 5% 60px;
+}
+
+
+/* Hide only the old top-level heading.
+   Headings inside the main page remain visible. */
+
+body > h1 {
+  display: none;
+}
+
+/* Collection heading */
+
+.collection-intro {
+  margin: 0 0 32px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--rose);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+
+.collection-intro h1 {
+  display: block;
+  margin: 0;
+  color: var(--brown);
+  font-size: clamp(2.1rem, 4vw, 3.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+
+.heading-period {
+  color: var(--rose);
+}
+
+.collection-subtitle {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* Existing wishlist heading */
+
+#wishlist-section > h2 {
+  margin: 0 0 28px;
+  color: var(--brown);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  line-height: 1.25;
+}
+
+
+/* 4. Main Add Cards button */
+
+#open-search-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 999px;
+  background: var(--rose);
+  color: white;
+  font-size: 0.94rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#open-search-btn:hover {
+  background: var(--rose-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(143, 89, 89, 0.18);
+}
+
+#open-search-btn:focus-visible,
+#search-btn:focus-visible,
+#close-modal-btn:focus-visible,
+.add-btn:focus-visible,
+.remove-btn:focus-visible {
+  outline: 3px solid rgba(170, 114, 114, 0.4);
+  outline-offset: 3px;
+}
+
+/* If Add Cards is outside the header, give it page spacing */
+
+body > #open-search-btn {
+  margin: 0 5%;
+}
+
+/* 5. Wishlist grid */
+
+#wishlist {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, 155px), 1fr)
+  );
+  align-items: start;
+  gap: 28px 22px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Individual saved cards */
+
+.wishlist-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 150px;
-}
-
-.card img {
   width: 100%;
+  min-width: 0;
+  padding: 9px 9px 13px;
+  border: 1px solid transparent;
+  border-radius: 15px;
+  background: transparent;
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.card {
-  position: relative;
+.wishlist-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border);
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
 }
 
-.add-btn,
-.remove-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  opacity: 0;
-  background: white;
+.wishlist-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 9px;
 }
 
-.card:hover .add-btn,
-.card:hover .remove-btn {
-  opacity: 1;
-}
+/* Card titles and set information */
 
 .card-name {
-  font-weight: bold;
-  margin: 4px 0 2px;
+  margin: 10px 0 3px;
+  color: var(--brown);
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
 .card-info {
-  font-size: 0.8rem;
-  color: gray;
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  text-align: center;
+  overflow-wrap: anywhere;
 }
 
-/* modal */
+/* 6. Search modal overlay */
+
 .hidden {
   display: none !important;
 }
 
 #modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  inset: 0;
+  z-index: 100;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  padding-top: 40px;
-  z-index: 100;
+  overflow-y: auto;
+  padding: 28px 20px;
+  background: rgba(54, 40, 37, 0.55);
+  backdrop-filter: blur(4px);
 }
 
-#modal {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  width: 90%;
-  max-width: 700px;
-  max-height: 80vh;
-  overflow-y: auto;
-  position: relative;
+#modal-overlay.hidden {
+  display: none !important;
 }
+
+/* Modal panel */
+
+#modal {
+  position: relative;
+  width: 100%;
+  max-width: 760px;
+  max-height: calc(100vh - 56px);
+  margin: auto 0;
+  padding: 32px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-bg);
+  color: var(--brown);
+  box-shadow: 0 18px 60px rgba(50, 35, 30, 0.2);
+}
+
+#modal h2 {
+  margin: 0 48px 22px 0;
+  color: var(--brown);
+  font-size: 1.7rem;
+  line-height: 1.3;
+}
+
+/* Modal close button */
 
 #close-modal-btn {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: none;
+  top: 16px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
   border: none;
-  font-size: 1.2rem;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--brown);
+  font-size: 1.8rem;
+  line-height: 1;
   cursor: pointer;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
 }
 
-/* wishlist */
-#wishlist-section {
-  margin-top: 2rem;
+#close-modal-btn:hover {
+  background: var(--rose-pale);
+  color: var(--rose-dark);
 }
 
-#wishlist {
+/* 7. Search input and Search button */
+
+.search-bar {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+  width: 100%;
+}
+
+#search-input {
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid #ddc9bd;
+  border-radius: 10px;
+  outline: none;
+  background: white;
+  color: var(--brown);
+  font-size: 1rem;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+#search-input::placeholder {
+  color: #a4938b;
+}
+
+#search-input:focus {
+  border-color: var(--rose);
+  box-shadow: 0 0 0 3px rgba(170, 114, 114, 0.15);
+}
+
+#search-btn {
+  flex-shrink: 0;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: var(--rose);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+#search-btn:hover {
+  background: var(--rose-dark);
+}
+
+/* 8. Search suggestions dropdown */
+
+#search-results {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 100%;
+  margin-top: 8px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 5px 15px rgba(83, 61, 56, 0.06);
+}
+
+#search-results:empty {
+  display: none;
+}
+
+#search-results p,
+#search-results .suggestion {
+  margin: 0;
+  padding: 10px 14px;
+  color: var(--brown);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+#search-results p:hover,
+#search-results .suggestion:hover {
+  background: var(--rose-pale);
+}
+
+/* 9. Search result cards */
+
+#results {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 1rem;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+  margin-top: 22px;
 }
 
-.wishlist-card {
+.card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 150px;
+  min-width: 0;
 }
 
-.wishlist-card img {
+.card img {
+  display: block;
   width: 100%;
+  height: auto;
+  border-radius: 9px;
 }
 
+/* Add and Remove buttons */
+
+.add-btn,
 .remove-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  margin: 0;
+  padding: 6px 11px;
+  border: 1px solid rgba(255, 250, 245, 0.85);
+  border-radius: 999px;
+  background: var(--rose);
+  color: white;
   font-size: 0.75rem;
+  font-weight: 700;
   cursor: pointer;
+  opacity: 0;
+  box-shadow: 0 2px 8px rgba(83, 61, 56, 0.18);
+  transition:
+    opacity 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
-.add-btn {
-  margin-top: 6px;
-  font-size: 0.75rem;
-  cursor: pointer;
+.card:hover .add-btn,
+.wishlist-card:hover .remove-btn {
+  opacity: 1;
+}
+
+.add-btn:hover,
+.remove-btn:hover {
+  background: var(--rose-dark);
+  transform: translateY(-1px);
+}
+
+/* Keep card controls available on touchscreens */
+
+@media (hover: none) {
+  .add-btn,
+  .remove-btn {
+    opacity: 1;
+  }
+}
+
+/* 10. Tablet layout */
+
+@media (max-width: 800px) {
+  .collection-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 40px 5% 72px;
+  }
+
+
+  #wishlist {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(140px, 1fr)
+    );
+    gap: 20px 14px;
+  }
+
+  #results {
+    gap: 16px;
+  }
+
+  #modal {
+    padding: 28px;
+  }
+}
+
+/* 11. Mobile layout */
+
+@media (max-width: 600px) {
+  .site-header {
+    gap: 12px;
+    padding: 14px 5%;
+  }
+
+  .brand-logo {
+    width: 135px;
+  }
+
+  .site-nav {
+    gap: 12px;
+  }
+
+  .nav-link {
+    display: none;
+  }
+
+  #open-search-btn {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+  }
+
+  body > #open-search-btn {
+    margin-left: 5%;
+  }
+
+  .collection-page {
+    padding: 32px 4% 44px;
+  }
+
+  .collection-intro {
+    margin-bottom: 24px;
+  }
+
+  #wishlist-section > h2 {
+    margin-bottom: 20px;
+  }
+
+  #wishlist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 10px;
+  }
+
+  .wishlist-card {
+    padding: 6px 6px 10px;
+    border-radius: 12px;
+  }
+
+  .wishlist-card .card-name {
+    margin-top: 8px;
+    font-size: 0.84rem;
+  }
+
+  .wishlist-card .card-info {
+    font-size: 0.74rem;
+  }
+
+  #modal-overlay {
+    padding: 12px;
+  }
+
+  #modal {
+    max-height: calc(100vh - 24px);
+    padding: 24px 18px;
+    border-radius: 16px;
+  }
+
+  #modal h2 {
+    font-size: 1.4rem;
+  }
+
+  .search-bar {
+    flex-direction: column;
+  }
+
+  #search-btn {
+    width: 100%;
+  }
+
+  #results {
+    justify-content: center;
+    gap: 18px 12px;
+  }
+}
+
+/* 12. Small phone adjustments */
+
+@media (max-width: 360px) {
+  .brand-logo {
+    width: 115px;
+  }
+
+  #open-search-btn {
+    padding: 9px 11px;
+    font-size: 0.8rem;
+  }
+
+  #wishlist {
+    gap: 12px 8px;
+  }
+
+  .collection-intro h1 {
+    font-size: 2rem;
+  }
+}
+
+/* 13. Respect reduced-motion preferences */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
