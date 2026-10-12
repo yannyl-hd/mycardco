@@ -3,25 +3,31 @@ const searchBtn = document.querySelector("#search-btn");
 const results = document.querySelector("#results");
 const autoSearchResults = document.querySelector('#search-results')
 const openSearchBtn = document.querySelector('#open-search-btn');
+const homeSearchBtn = document.querySelector('#home-search-btn');
 const closeModalBtn = document.querySelector('#close-modal-btn');
 const modalOverlay = document.querySelector('#modal-overlay');
 
-openSearchBtn.addEventListener('click', function() {
-  modalOverlay.classList.remove('hidden');
-});
+function openSearch() {
+  if (modalOverlay) {
+    modalOverlay.classList.remove('hidden');
+  }
+}
 
-closeModalBtn.addEventListener('click', function() {
+openSearchBtn?.addEventListener('click', openSearch);
+homeSearchBtn?.addEventListener('click', openSearch);
+
+closeModalBtn?.addEventListener('click', function() {
   modalOverlay.classList.add('hidden');
 });
 
-modalOverlay.addEventListener('click', function(e) {
+modalOverlay?.addEventListener('click', function(e) {
   if (e.target === modalOverlay) {
     modalOverlay.classList.add('hidden');
   }
 });
 
 
-searchBtn.addEventListener('click', function() {
+searchBtn?.addEventListener('click', function() {
   const query = searchInput.value;
 
   fetch(`https://api.tcgdex.net/v2/en/sets?name=${query}`)
@@ -146,7 +152,7 @@ searchBtn.addEventListener('click', function() {
     });
 });
 
-searchInput.addEventListener('input', function() {
+searchInput?.addEventListener('input', function() {
   const query = searchInput.value;
 
   if (query.length === 0) {
@@ -198,7 +204,7 @@ searchInput.addEventListener('input', function() {
     });
   });
 });
-searchInput.addEventListener('blur', function() {
+searchInput?.addEventListener('blur', function() {
   setTimeout(function() {
     autoSearchResults.innerHTML = '';
   }, 200);
@@ -224,6 +230,7 @@ function addToWishlist(card) {
 function renderwishlist() {
   const wishlist = getWishlist();
   const container = document.getElementById('wishlist');
+  if (!container) return;
   container.innerHTML = '';
 
   wishlist.forEach(function(card, index) {
@@ -250,10 +257,6 @@ function renderwishlist() {
     removeBtn.addEventListener('click', function() {
       removeFromWishlist(index);
     });
-
-    item.appendChild(removeBtn);
-    container.appendChild(item);
-
     item.appendChild(img);
     item.appendChild(name);
     item.appendChild(setinfo);
@@ -268,5 +271,43 @@ function removeFromWishlist(index) {
   saveWishlist(wishlist);             
   renderwishlist();                   
 }
+
+function getCollectionName() {
+  return localStorage.getItem('collectionName') || 'My Collection';
+}
+
+function renderTitle() {
+  const title = document.getElementById('collection-title');
+  if (!title) return;
+  title.textContent = getCollectionName();       // the saved name (or the default)
+}
+
+const renameBtn = document.getElementById('rename-btn');
+renameBtn?.addEventListener('click', function() {
+  const title = document.getElementById('collection-title');
+
+  const input = document.createElement('input');
+  input.classList.add('title-input');
+  input.value = getCollectionName();            // start with the current name in the box
+
+  title.replaceWith(input);     // swap the title text for the box
+  input.focus();
+
+  function finish() {
+    const newName = input.value.trim();
+    if (newName) {
+      localStorage.setItem('collectionName', newName);
+    }
+    input.replaceWith(title);     // swap the title text back in
+    renderTitle();
+  }
+
+  input.addEventListener('blur', finish);
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') input.blur();
+  });
+});
+
+renderTitle();
 
 renderwishlist();

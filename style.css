@@ -98,6 +98,63 @@ button {
 
 /* 3. Main page layout */
 
+/* Home page */
+.home-intro {
+  text-align: center;
+}
+
+.home-description {
+  max-width: 520px;
+  margin: 0 auto 30px;   /* was: 0 0 30px */
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+
+.home-page {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 72px 5% 90px;
+}
+
+.home-intro h1 {
+  margin: 0 0 18px;
+  color: var(--brown);
+  font-size: clamp(2.6rem, 6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+
+.primary-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 999px;
+  background: var(--rose);
+  color: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.primary-button:hover {
+  background: var(--rose-dark);
+  transform: translateY(-2px);
+}
+
+/* Collection page description */
+
+.collection-description {
+  margin: 10px 0 32px;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
 .collection-page {
   width: 100%;
   max-width: 1500px;
@@ -209,19 +266,18 @@ body > #open-search-btn {
 }
 
 /* 5. Wishlist grid */
-
 #wishlist {
   display: grid;
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(min(100%, 155px), 1fr)
-  );
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 24px;
   align-items: start;
   gap: 28px 22px;
   width: 100%;
   margin: 0;
   padding: 0;
 }
+
+
 
 /* Individual saved cards */
 
@@ -472,33 +528,26 @@ body > #open-search-btn {
   position: absolute;
   top: 8px;
   right: 8px;
-  z-index: 2;
-  margin: 0;
-  padding: 6px 11px;
-  border: 1px solid rgba(255, 250, 245, 0.85);
-  border-radius: 999px;
-  background: var(--rose);
-  color: white;
-  font-size: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
   opacity: 0;
-  box-shadow: 0 2px 8px rgba(83, 61, 56, 0.18);
-  transition:
-    opacity 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
+  padding: 6px 12px;
+  background-color: #ead2d2;
+  color: #604747;
+  border: 1px solid #c49a9a;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: opacity 0.2s ease, background-color 0.2s ease;
 }
 
 .card:hover .add-btn,
+.card:hover .remove-btn,
 .wishlist-card:hover .remove-btn {
   opacity: 1;
 }
 
 .add-btn:hover,
 .remove-btn:hover {
-  background: var(--rose-dark);
-  transform: translateY(-1px);
+  background-color: #d9b5b5;
 }
 
 /* Keep card controls available on touchscreens */
@@ -657,4 +706,48 @@ body > #open-search-btn {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
   }
+}
+
+/* Rename Button */
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.title-row h1 {
+  margin: 0;
+  font-size: clamp(2.1rem, 4vw, 3.2rem);   /* the big size you want */
+  line-height: 1.15;
+  letter-spacing: -0.04em;
+}
+
+#rename-btn {
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+#rename-btn:hover {
+  color: var(--rose-dark);
+  background: var(--rose-pale);
+}
+
+.title-input {
+  width: 14ch;
+  field-sizing: content;
+  max-width: 100%;
+  padding: 4px 10px;
+  border: 2px solid var(--rose);
+  border-radius: 10px;
+  background: white;
+  color: var(--brown);
+  font: inherit;
+  font-weight: 700;
+  outline: none;
 }

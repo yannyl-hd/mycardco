@@ -1,0 +1,54 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Collection — mycardco.</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header class="site-header">
+    <a href="index.html" class="brand">
+      <img src="./logolong.png" alt="mycardco." class="brand-logo">
+    </a>
+
+    <nav class="site-nav">
+      <a href="collections.html" class="nav-link active">My Collection</a>
+      <button id="open-search-btn">Search Cards</button>
+    </nav>
+  </header>
+
+<main class="collection-page">
+  <section id="wishlist-section">
+    <p class="eyebrow">YOUR PERSONAL CARD SHELF</p>
+    <h1><span id="collection-title">My Collection</span><span class="heading-period">.</span><button id="rename-btn">✎</button></h1>
+    
+
+    <div id="wishlist"></div>
+  </section>
+</main>
+
+  <div id="modal-overlay" class="hidden">
+  <div id="modal">
+    <button id="close-modal-btn" aria-label="Close search">✕</button>
+    <h2>Search Cards</h2>
+
+    <div class="search-bar">
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search Pokémon..."
+      >
+      <button id="search-btn">Search</button>
+    </div>
+
+    <div id="search-results"></div>
+    <div id="results"></div>
+  </div>
+</div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,36 +1,42 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mycardco. — Pokémon Card Wishlist</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <header class="site-header">
     <a href="index.html" class="brand">
-      <img
-        src="./logolong.png"
-        alt="mycardco."
-        class="brand-logo"
-      >
+      <img src="./logolong.png" alt="mycardco." class="brand-logo">
     </a>
 
     <nav class="site-nav">
-    <a href="#wishlist-section" class="nav-link">My Collection</a>
-    <button id="open-search-btn">+ Add Cards</button>
-  </nav>
+      <a href="collections.html" class="nav-link">My Collection</a>
+      <button id="open-search-btn">Search Cards</button>
+    </nav>
   </header>
 
-
-  <div id="wishlist-section">
-    <h2>My Wishslist</h2>
-    <div id="wishlist"></div>
-  </div>
+  <main class="home-page">
+    <section class="home-intro">
+      <p class="eyebrow">YOUR LITTLE CORNER OF THE POKÉMON WORLD</p>
+      <h1>Curate your<br>collection.</h1>
+      <p class="home-description">
+        Browse Pokémon cards, save the ones you love,
+        and build your own wishlist.
+      </p>
+      <button class="primary-button" id="home-search-btn">
+       Search Cards <span aria-hidden="true">↗</span>
+      </button>
+    </section>
+  </main>
 
   <div id="modal-overlay" class="hidden">
     <div id="modal">
-      <button id="close-modal-btn">✕</button>
+      <button id="close-modal-btn" aria-label="Close search">✕</button>
       <h2>Search Cards</h2>
 
       <div class="search-bar">
